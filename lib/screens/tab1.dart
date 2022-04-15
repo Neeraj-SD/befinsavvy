@@ -29,24 +29,77 @@ class AddTaskModalSheet extends StatelessWidget {
       // });
     }
 
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(selectedDate == null
-                ? 'No date selected'
-                : 'selectd date : ${DateFormat.yMMMd().format(selectedDate)}'),
-            FlatButton(
-              onPressed: datePicker,
-              child: Text(
-                'Choose Date',
-                style: TextStyle(color: Theme.of(context).primaryColor),
+    return Padding(
+      padding: const EdgeInsets.all(28.0),
+      child: Column(
+        // mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Add a task',
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          const SizedBox(
+            height: 40,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                selectedDate == null
+                    ? 'No date selected'
+                    : 'selectd date : ${DateFormat.yMMMd().format(selectedDate)}',
+                style: Theme.of(context).textTheme.titleMedium,
               ),
-            ),
-          ],
-        ),
-      ],
+              FlatButton(
+                onPressed: datePicker,
+                child: Text(
+                  'Choose Date',
+                  style: TextStyle(color: Theme.of(context).primaryColor),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text(
+                'Status: ',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.purple,
+                ),
+                child: const Text(
+                  'Yes',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.grey,
+                ),
+                child: const Text(
+                  'No',
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 }
