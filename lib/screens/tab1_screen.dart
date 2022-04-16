@@ -38,7 +38,7 @@ class _AddTaskModalSheetState extends State<AddTaskModalSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = TaskProvider();
+    final provider = Provider.of<TaskProvider>(context);
     void datePicker() async {
       var datePicked = await showDatePicker(
           context: context,
@@ -157,13 +157,28 @@ class _AddTaskModalSheetState extends State<AddTaskModalSheet> {
 class _Tab1State extends State<Tab1> {
   @override
   Widget build(BuildContext context) {
+    // print(context.read<TaskProvider>().tasks);
+    final provider = Provider.of<TaskProvider>(context);
+    provider.fetchTasks();
+    // final provider = TaskProvider();
     return Scaffold(
-      body: const Center(
-        child: Text('ListView'),
-      ),
+      body: provider.tasks.length == 0
+          ? const Center(
+              child: Text('No Tasks'),
+            )
+          : ListView.builder(
+              itemCount: provider.tasks.length,
+              itemBuilder: (_, index) => ListTile(
+                title: Text('${provider.tasks[index].id}'),
+                subtitle: Text('${provider.tasks[index].date}'),
+                trailing: Text('${provider.tasks[index].status}'),
+              ),
+            ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => showModalBottomSheet(
-            context: context, builder: (_) => AddTaskModalSheet()),
+            context: context,
+            builder: (_) => ListenableProvider.value(
+                value: provider, child: AddTaskModalSheet())),
         tooltip: 'Add Task',
         child: const Icon(Icons.add),
       ),
