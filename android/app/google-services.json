@@ -1,20 +1,20 @@
 {
   "project_info": {
-    "project_number": "962387710872",
-    "project_id": "be-fin-savvy",
-    "storage_bucket": "be-fin-savvy.appspot.com"
+    "project_number": "134201953965",
+    "project_id": "be-fin-savvy-ac7f8",
+    "storage_bucket": "be-fin-savvy-ac7f8.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:962387710872:android:c4a107a91f1b6b518a91ed",
+        "mobilesdk_app_id": "1:134201953965:android:db3ccc8734bc1dfcbf8024",
         "android_client_info": {
           "package_name": "com.example.befinsavvy"
         }
       },
       "oauth_client": [
         {
-          "client_id": "962387710872-b6f2mkaje3tjt68k4lctc6rukbfv1g6l.apps.googleusercontent.com",
+          "client_id": "134201953965-58jq0kkjqhanblhfghhbd8g9tdfop7ip.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.befinsavvy",
@@ -22,20 +22,20 @@
           }
         },
         {
-          "client_id": "962387710872-6n5fcng3tmsnintblk4371v0g6ggr6un.apps.googleusercontent.com",
+          "client_id": "134201953965-0f4ak135tjv63n5u18b00sg14jmfdeh0.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBgI126SH5wbzn3NE9nAs1AYBt4FvDnsbA"
+          "current_key": "AIzaSyCxF1G7M1SAha7rFRWJYOvCAaPiTe1H-0A"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "962387710872-6n5fcng3tmsnintblk4371v0g6ggr6un.apps.googleusercontent.com",
+              "client_id": "134201953965-0f4ak135tjv63n5u18b00sg14jmfdeh0.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
