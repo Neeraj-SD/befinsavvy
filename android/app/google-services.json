@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "962387710872",
+    "project_id": "be-fin-savvy",
+    "storage_bucket": "be-fin-savvy.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:962387710872:android:c4a107a91f1b6b518a91ed",
+        "android_client_info": {
+          "package_name": "com.example.befinsavvy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "962387710872-b6f2mkaje3tjt68k4lctc6rukbfv1g6l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.befinsavvy",
+            "certificate_hash": "0db5a8a48e3d609ce209c7fee7127c502be03b7c"
+          }
+        },
+        {
+          "client_id": "962387710872-6n5fcng3tmsnintblk4371v0g6ggr6un.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgI126SH5wbzn3NE9nAs1AYBt4FvDnsbA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "962387710872-6n5fcng3tmsnintblk4371v0g6ggr6un.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
