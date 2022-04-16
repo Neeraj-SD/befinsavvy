@@ -1,6 +1,8 @@
 import 'package:befinsavvy/providers/auth_provider.dart';
+import 'package:befinsavvy/providers/income_expense_provider.dart';
 import 'package:befinsavvy/providers/task_provider.dart';
 import 'package:befinsavvy/screens/auth_screen.dart';
+import 'package:befinsavvy/screens/income_expense_screen.dart';
 import 'package:befinsavvy/screens/tab1_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -41,13 +43,16 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(
             create: (_) => AuthProvider(),
           ),
+          ChangeNotifierProvider(
+            create: (_) => IncomeExpenseProvider(),
+          ),
         ],
         child: StreamBuilder<User?>(
             stream: FirebaseAuth.instance.authStateChanges(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 print(snapshot.data);
-                return const Tab1();
+                return IncomeExpenseScreen();
               }
               return const AuthScreen();
             }),
