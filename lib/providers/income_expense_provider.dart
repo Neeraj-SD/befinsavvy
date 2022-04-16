@@ -33,6 +33,22 @@ class IncomeExpenseProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  String showInsight() {
+    double total_expenses = 0, total_incomes = 0;
+
+    _expenses.forEach((element) => total_expenses += element.value);
+
+    _incomes.forEach((element) => total_incomes += element.value);
+
+    double savedAmount = (total_incomes - total_expenses) / total_incomes;
+
+    if (total_expenses > 0.5 * total_incomes) {
+      return 'You are spending too much money. You save only ${savedAmount.toStringAsFixed(2)}% of your income.';
+    } else {
+      return 'Good job. You are saving ${savedAmount.toStringAsFixed(2)}% of your income.';
+    }
+  }
+
   void fetchData() async {
     var result =
         await collectionReference.doc(user!.uid).collection('incomes').get();
@@ -53,6 +69,10 @@ class IncomeExpenseProvider with ChangeNotifier {
     });
     _expenses = parsedList;
     print('expenses $_expenses');
+
+    // notifyListeners();
+    prepareChart();
+    // notifyListeners();
   }
 
   void prepareChart() {
@@ -71,6 +91,7 @@ class IncomeExpenseProvider with ChangeNotifier {
     }
 
     incomeDataMap = map;
+    showExpensesState ? showExpenses() : showIncomes();
 
     notifyListeners();
     // print(_expenses.asMap());
