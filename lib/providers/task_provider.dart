@@ -1,3 +1,4 @@
+import 'package:befinsavvy/constants/enums.dart';
 import 'package:befinsavvy/models/task.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -5,12 +6,40 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TaskProvider extends ChangeNotifier {
   List<Task> _tasks = [];
+  List<Task> _completedList = [];
+  List<Task> _uncompletedList = [];
+
+  List<Task> displayList = [];
+
   CollectionReference collectionReference =
       FirebaseFirestore.instance.collection('users');
 
   final user = FirebaseAuth.instance.currentUser;
 
   get tasks => <Task>[..._tasks];
+
+  FilteredValue filteredValue = FilteredValue.All;
+
+  void setFilter(FilteredValue value) {
+    filteredValue = value;
+    setDisplayList();
+  }
+
+  void setDisplayList() {
+    if (filteredValue == FilteredValue.All) {
+      displayList = _tasks;
+    } else if (filteredValue == FilteredValue.Completed) {
+      displayList = _completedList;
+    } else {
+      displayList = _uncompletedList;
+    }
+    notifyListeners();
+  }
+
+  void filterList() {
+    _completedList = _tasks.where((element) => element.status).toList();
+    _uncompletedList = _tasks.where((element) => !element.status).toList();
+  }
 
   Future<void> fetchTasks() async {
     print('Fetching tasks...');
@@ -33,8 +62,11 @@ class TaskProvider extends ChangeNotifier {
       response_tasks = [...response_tasks, ...taskFromJson(list.docs)];
       _tasks = response_tasks;
       print(response_tasks);
+
       orderByDate();
-      notifyListeners();
+      filterList();
+      setFilter(filteredValue);
+      // notifyListeners();
     });
   }
 

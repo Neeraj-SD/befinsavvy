@@ -193,9 +193,9 @@ class _Tab1State extends State<Tab1> {
     }
     // final provider = TaskProvider();
     return Scaffold(
-      appBar: AppBar(actions: [
+      appBar: AppBar(title: const Text('BeFinSavvy'), actions: [
         PopupMenuButton(
-          onSelected: null,
+          onSelected: ((FilteredValue value) => provider.setFilter(value)),
           icon: const Icon(Icons.more_vert),
           itemBuilder: (_) => [
             const PopupMenuItem(
@@ -213,14 +213,14 @@ class _Tab1State extends State<Tab1> {
           ],
         ),
       ]),
-      body: provider.tasks.length == 0
+      body: provider.displayList.isEmpty
           ? const Center(
               child: Text('No Tasks'),
             )
           : ListView.builder(
-              itemCount: provider.tasks.length,
+              itemCount: provider.displayList.length,
               itemBuilder: (_, index) => ExpansionTile(
-                leading: provider.tasks[index].status
+                leading: provider.displayList[index].status
                     ? const Icon(
                         Icons.check_circle,
                         color: Colors.green,
@@ -229,9 +229,9 @@ class _Tab1State extends State<Tab1> {
                         Icons.close,
                         color: Colors.red,
                       ),
-                title: Text('${provider.tasks[index].id}'),
-                subtitle: Text('${provider.tasks[index].date}'),
-                // trailing: Text('${provider.tasks[index].status}'),
+                title: Text('${provider.displayList[index].id}'),
+                subtitle: Text('${provider.displayList[index].date}'),
+                // trailing: Text('${provider.displayList[index].status}'),
                 // trailing: IconButton(
                 //   icon: const Icon(Icons.more_vert),
                 //   onPressed: () {},
@@ -242,7 +242,7 @@ class _Tab1State extends State<Tab1> {
                     children: [
                       IconButton(
                         onPressed: () =>
-                            provider.deleteTask(provider.tasks[index]),
+                            provider.deleteTask(provider.displayList[index]),
                         icon: const Icon(
                           Icons.delete,
                           color: Colors.red,
@@ -254,7 +254,7 @@ class _Tab1State extends State<Tab1> {
                           builder: (_) => ListenableProvider.value(
                             value: provider,
                             child: AddTaskModalSheet(
-                              selectedTask: provider.tasks[index],
+                              selectedTask: provider.displayList[index],
                             ),
                           ),
                         ),
