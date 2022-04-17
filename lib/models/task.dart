@@ -1,5 +1,11 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+List<Task> taskFromJson(
+        List<QueryDocumentSnapshot<Map<String, dynamic>>> str) =>
+    List<Task>.from(str.map((x) => Task.fromMap(x.data())));
+
 class Task {
   String id;
   DateTime date;
@@ -41,6 +47,8 @@ class Task {
   String toJson() => json.encode(toMap());
 
   factory Task.fromJson(String source) => Task.fromMap(json.decode(source));
+
+  // factory Task.fromJson(String source) => Task.fromMap(json.decode(source));
 
   @override
   String toString() => 'Task(id: $id, date: $date, status: $status)';

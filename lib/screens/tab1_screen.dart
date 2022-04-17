@@ -1,7 +1,11 @@
-import 'package:befinsavvy/providers/task_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
+import 'package:befinsavvy/providers/task_provider.dart';
+
+import '../constants/enums.dart';
+import '../models/task.dart';
 
 class Tab1 extends StatefulWidget {
   const Tab1({Key? key}) : super(key: key);
@@ -11,9 +15,11 @@ class Tab1 extends StatefulWidget {
 }
 
 class AddTaskModalSheet extends StatefulWidget {
-  AddTaskModalSheet({Key? key}) : super(key: key) {
-    // selectedDate = DateTime.now();
-  }
+  AddTaskModalSheet({
+    Key? key,
+    this.selectedTask,
+  }) : super(key: key);
+  Task? selectedTask;
 
   @override
   State<AddTaskModalSheet> createState() => _AddTaskModalSheetState();
@@ -25,8 +31,15 @@ class _AddTaskModalSheetState extends State<AddTaskModalSheet> {
 
   @override
   void initState() {
-    selectedDate = null;
     status = false;
+
+    widget.selectedTask != null
+        ? selectedDate = widget.selectedTask!.date
+        : selectedDate = null;
+
+    widget.selectedTask != null
+        ? status = widget.selectedTask!.status
+        : status = false;
     super.initState();
   }
 
@@ -143,9 +156,21 @@ class _AddTaskModalSheetState extends State<AddTaskModalSheet> {
             child: ElevatedButton(
               onPressed: () {
                 if (selectedDate == null) return;
-                provider.addTask(selectedDate!, status);
+
+                if (widget.selectedTask != null &&
+                    widget.selectedTask!.status == status &&
+                    widget.selectedTask!.date == selectedDate) {
+                  return;
+                }
+
+                if (widget.selectedTask == null) {
+                  provider.addTask(selectedDate!, status);
+                } else {
+                  provider.updateTask(
+                      widget.selectedTask!, selectedDate!, status);
+                }
               },
-              child: const Text('ADD'),
+              child: Text(widget.selectedTask != null ? 'UPDATE' : 'ADD'),
             ),
           ),
         ],
@@ -155,30 +180,102 @@ class _AddTaskModalSheetState extends State<AddTaskModalSheet> {
 }
 
 class _Tab1State extends State<Tab1> {
+  bool isInit = true;
+
   @override
   Widget build(BuildContext context) {
     // print(context.read<TaskProvider>().tasks);
     final provider = Provider.of<TaskProvider>(context);
-    provider.fetchTasks();
+
+    if (isInit) {
+      provider.fetchTasks();
+      isInit = false;
+    }
     // final provider = TaskProvider();
     return Scaffold(
+      appBar: AppBar(actions: [
+        PopupMenuButton(
+          onSelected: null,
+          icon: const Icon(Icons.more_vert),
+          itemBuilder: (_) => [
+            const PopupMenuItem(
+              child: Text('Completed only'),
+              value: FilteredValue.Completed,
+            ),
+            const PopupMenuItem(
+              child: Text('UnCompleted only'),
+              value: FilteredValue.Uncompleted,
+            ),
+            const PopupMenuItem(
+              child: Text('Show All'),
+              value: FilteredValue.All,
+            ),
+          ],
+        ),
+      ]),
       body: provider.tasks.length == 0
           ? const Center(
               child: Text('No Tasks'),
             )
           : ListView.builder(
               itemCount: provider.tasks.length,
-              itemBuilder: (_, index) => ListTile(
+              itemBuilder: (_, index) => ExpansionTile(
+                leading: provider.tasks[index].status
+                    ? const Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                      )
+                    : const Icon(
+                        Icons.close,
+                        color: Colors.red,
+                      ),
                 title: Text('${provider.tasks[index].id}'),
                 subtitle: Text('${provider.tasks[index].date}'),
-                trailing: Text('${provider.tasks[index].status}'),
+                // trailing: Text('${provider.tasks[index].status}'),
+                // trailing: IconButton(
+                //   icon: const Icon(Icons.more_vert),
+                //   onPressed: () {},
+                // ),
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      IconButton(
+                        onPressed: () =>
+                            provider.deleteTask(provider.tasks[index]),
+                        icon: const Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () => showModalBottomSheet(
+                          context: context,
+                          builder: (_) => ListenableProvider.value(
+                            value: provider,
+                            child: AddTaskModalSheet(
+                              selectedTask: provider.tasks[index],
+                            ),
+                          ),
+                        ),
+                        icon: const Icon(
+                          Icons.edit,
+                          // color: Colors.yellow,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => showModalBottomSheet(
-            context: context,
-            builder: (_) => ListenableProvider.value(
-                value: provider, child: AddTaskModalSheet())),
+          context: context,
+          builder: (_) => ListenableProvider.value(
+            value: provider,
+            child: AddTaskModalSheet(),
+          ),
+        ),
         tooltip: 'Add Task',
         child: const Icon(Icons.add),
       ),
