@@ -22,10 +22,10 @@ class AuthScreen extends StatelessWidget {
                     child: const Text('Sign-in'),
                   ),
           ),
-          ElevatedButton(
-            onPressed: () => provider.logout(),
-            child: const Text('logout'),
-          ),
+          // ElevatedButton(
+          //   onPressed: () => provider.logout(),
+          //   child: const Text('logout'),
+          // ),
         ],
       ),
     );

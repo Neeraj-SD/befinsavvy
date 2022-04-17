@@ -4,11 +4,14 @@ import 'package:befinsavvy/providers/task_provider.dart';
 import 'package:befinsavvy/screens/auth_screen.dart';
 import 'package:befinsavvy/screens/income_expense_screen.dart';
 import 'package:befinsavvy/screens/tab1_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'screens/settings_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,27 +39,31 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MultiProvider(
-        providers: [
-          ChangeNotifierProvider(
-            create: (_) => TaskProvider(),
-          ),
-          ChangeNotifierProvider(
-            create: (_) => AuthProvider(),
-          ),
-          ChangeNotifierProvider(
-            create: (_) => IncomeExpenseProvider(),
-          ),
-        ],
+      home: ChangeNotifierProvider(
+        create: (context) => AuthProvider(),
         child: StreamBuilder<User?>(
-            stream: FirebaseAuth.instance.authStateChanges(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                print(snapshot.data);
-                return HomePageFoo();
-              }
-              return const AuthScreen();
-            }),
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              print(snapshot.data);
+              return MultiProvider(
+                providers: [
+                  ChangeNotifierProvider(
+                    create: (_) => TaskProvider(),
+                  ),
+                  // ChangeNotifierProvider(
+                  //   create: (_) => AuthProvider(),
+                  // ),
+                  ChangeNotifierProvider(
+                    create: (_) => IncomeExpenseProvider(),
+                  ),
+                ],
+                child: const HomePageFoo(),
+              );
+            }
+            return AuthScreen();
+          },
+        ),
       ),
     );
   }
@@ -76,6 +83,7 @@ class _HomePageFooState extends State<HomePageFoo> {
   static final List<Widget> _widgetOptions = <Widget>[
     const Tab1(),
     IncomeExpenseScreen(),
+    SettingsScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -101,6 +109,10 @@ class _HomePageFooState extends State<HomePageFoo> {
             title: const Text('Insights'),
             // icon: FaIcon(FontAwesomeIcons.solidComments),
             // icon: ,
+          ),
+          SalomonBottomBarItem(
+            icon: const Icon(Icons.settings),
+            title: const Text('Settings'),
           ),
         ],
       ),

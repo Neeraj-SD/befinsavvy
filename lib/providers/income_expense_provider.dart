@@ -4,6 +4,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
 class IncomeExpenseProvider with ChangeNotifier {
+  IncomeExpenseProvider() {
+    streamListener();
+  }
+
   List<Amount> _expenses = [];
   List<Amount> _incomes = [];
 
@@ -14,10 +18,16 @@ class IncomeExpenseProvider with ChangeNotifier {
   Map<String, double> incomeDataMap = {};
   Map<String, double> displayDataMap = {};
 
+  void streamListener() {
+    FirebaseAuth.instance.userChanges().listen((event) {
+      user = FirebaseAuth.instance.currentUser;
+    });
+  }
+
   CollectionReference collectionReference =
       FirebaseFirestore.instance.collection('users');
 
-  final user = FirebaseAuth.instance.currentUser;
+  User? user = FirebaseAuth.instance.currentUser;
 
   get expenses => _expenses;
   get incomes => _incomes;

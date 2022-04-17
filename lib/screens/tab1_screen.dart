@@ -71,10 +71,15 @@ class _AddTaskModalSheetState extends State<AddTaskModalSheet> {
         // mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            'Add a task',
-            style: Theme.of(context).textTheme.headline6,
-          ),
+          widget.selectedTask == null
+              ? Text(
+                  'Add a task',
+                  style: Theme.of(context).textTheme.headline6,
+                )
+              : Text(
+                  'Update task',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
           const SizedBox(
             height: 40,
           ),
@@ -84,7 +89,7 @@ class _AddTaskModalSheetState extends State<AddTaskModalSheet> {
               Text(
                 selectedDate == null
                     ? 'No date selected'
-                    : 'selectd date : ${DateFormat.yMMMd().format(selectedDate!)}',
+                    : 'selected date : ${DateFormat.yMMMd().format(selectedDate!)}',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               FlatButton(

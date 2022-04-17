@@ -25,6 +25,8 @@ class AuthProvider with ChangeNotifier {
       final authResult =
           await FirebaseAuth.instance.signInWithCredential(credential);
 
+      print(FirebaseAuth.instance.currentUser!.uid);
+
       isLoading = false;
       notifyListeners();
     } catch (ex) {
