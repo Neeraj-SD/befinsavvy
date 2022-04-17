@@ -7,6 +7,7 @@ class IncomeExpenseProvider with ChangeNotifier {
   List<Amount> _expenses = [];
   List<Amount> _incomes = [];
 
+  bool isEditMode = false;
   bool showExpensesState = true;
 
   Map<String, double> expenseDataMap = {};
@@ -27,6 +28,8 @@ class IncomeExpenseProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  // void
+
   void showIncomes() {
     showExpensesState = false;
     displayDataMap = incomeDataMap;
@@ -40,7 +43,9 @@ class IncomeExpenseProvider with ChangeNotifier {
 
     _incomes.forEach((element) => total_incomes += element.value);
 
-    double savedAmount = (total_incomes - total_expenses) / total_incomes;
+    double savedAmount =
+        ((total_incomes - total_expenses) / total_incomes) * 100;
+    print(savedAmount);
 
     if (total_expenses > 0.5 * total_incomes) {
       return 'You are spending too much money. You save only ${savedAmount.toStringAsFixed(2)}% of your income.';
